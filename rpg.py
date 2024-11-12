@@ -1,11 +1,9 @@
-from classes.etre import personnage
-from classes.weapon import weapon
-from classes.etre import Monster
+from classes.etre import personnage, Monster, type_interactions
 from classes.objet import Potion
-from classes.objet import potions
-
+from classes.weapon import weapon
 import random
 
+#probleme d'import 
 knife=weapon("Knife","physical",50)
 magic_book=weapon("magic_book","magic",75)
 sword = weapon("Sword", "Physical", 70)   
@@ -17,7 +15,6 @@ fire_staff = weapon("Fire Staff", "Magic", 100)
 lightning_wand = weapon("Lightning Wand", "Magic", 90)  
 holy_sword = weapon("Holy Sword", "Physical", 85)  
 armes = [knife, sword, axe, magic_book, staff, crossbow, dagger, fire_staff, lightning_wand, holy_sword]
-
 
 physical_weapons = [
     weapon("Knife", "Physical", 50),
@@ -41,39 +38,37 @@ skeleton_weapons = [
     weapon("Skeleton Shield", "Physical", 35),
 ]
 
+        
 
+healing_potion = Potion("Potion de soin", "heal", 30)  # Restaure 30 HP
+attack_buff_potion = Potion("Potion de force", "attack", 10)  # Augmente l'attaque de 10
+defense_buff_potion = Potion("Potion de défense", "defense", 10)  # Augmente la défense de 10
+mana_potion = Potion("Potion de mana", "heal", 20)  # Restaure 20 HP (si tu as un système de mana)
+speed_buff_potion = Potion("Potion de rapidité", "attack", 5)  # Augmente la vitesse d'attaque (hypothétique)
+strength_potion = Potion("Potion de force supérieure", "attack", 20)  # Augmente l'attaque de 20
+invincibility_potion = Potion("Potion d'invincibilité", "defense", 50)  # Augmente la défense de 50 pour un tour
+poison_potion = Potion("Potion de poison", "attack", -15)  # Inflige 15 dégâts à l'ennemi lors de l'utilisation
+revival_potion = Potion("Potion de résurrection", "heal", 100)  # Restaure 100 HP
+critical_hit_potion = Potion("Potion de coup critique", "attack", 15)  # Augmente les chances de coup critique
 
-gobelin = Monster("Gobelin", "Physique", hp=30, attack=15, defense=5)
-ogre = Monster("Ogre", "Physique", hp=100, attack=25, defense=15)
-spectre = Monster("Spectre", "Magique", hp=40, attack=20, defense=3)
-liche = Monster("Liche", "Magique", hp=80, attack=30, defense=10)
-chevalier_squelette = Monster("Chevalier Squelette", "Squelette", hp=50, attack=18, defense=8)
-
-monstres = [gobelin, ogre, spectre, liche, chevalier_squelette]
-
-type_interactions = {
-    "Physical": {
-        "Gobelin": 1.0,
-        "Ogre": 0.5,      
-        "Spectre": 0.8,   
-        "Liche": 0.5,     
-        "Chevalier Squelette": 1.0,
-    },
-    "Magic": {
-        "Gobelin": 1.5,   
-        "Ogre": 1.0,      
-        "Spectre": 1.0,   
-        "Liche": 2.0,     
-        "Chevalier Squelette": 0.5,
-    }
-}
-
+potions = [
+    healing_potion,
+    attack_buff_potion,
+    defense_buff_potion,
+    mana_potion,
+    speed_buff_potion,
+    strength_potion,
+    invincibility_potion,
+    poison_potion,
+    revival_potion,
+    critical_hit_potion
+]
 
 
 def RPG():
     c=input("Please enter your name")
     character=personnage(c)
-    print("What weapon do yoyu like:")
+    print("What weapon do you like:")
     print("1.Knife")
     print("2.Magic book")
     first_weapon =int(input())

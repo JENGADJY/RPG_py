@@ -4,17 +4,6 @@ class etre :
     def __init__(self,name):
         self.name= name
 
-class Monster(etre):
-    def __init__(self,name,type,hp,attack,defense):
-        super().__init__(name)
-        self.type=type
-        self.hp = hp
-        self.attack = attack
-        self.defense = defense
-        self.weapon=[]
-
-# reste a definir plus tard
-
 class personnage(etre) :
     def __init__(self,name):
         super().__init__(name)
@@ -60,5 +49,42 @@ class personnage(etre) :
             print("Choix invalide.")
             return None
 
+
+
+
+
+class Monster(etre):
+    def __init__(self,name,type,hp,attack,defense):
+        super().__init__(name)
+        self.type=type
+        self.hp = hp
+        self.attack = attack
+        self.defense = defense
+        self.weapon=[]
+
+gobelin = Monster("Gobelin", "Physique", hp=30, attack=15, defense=5)
+ogre = Monster("Ogre", "Physique", hp=100, attack=25, defense=15)
+spectre = Monster("Spectre", "Magique", hp=40, attack=20, defense=3)
+liche = Monster("Liche", "Magique", hp=80, attack=30, defense=10)
+chevalier_squelette = Monster("Chevalier Squelette", "Squelette", hp=50, attack=18, defense=8)
+
+monstres = [gobelin, ogre, spectre, liche, chevalier_squelette]
+
+type_interactions = {
+    "Physical": {
+        "Gobelin": 1.0,
+        "Ogre": 0.5,      
+        "Spectre": 0.8,   
+        "Liche": 0.5,     
+        "Chevalier Squelette": 1.0,
+    },
+    "Magic": {
+        "Gobelin": 1.5,   
+        "Ogre": 1.0,      
+        "Spectre": 1.0,   
+        "Liche": 2.0,     
+        "Chevalier Squelette": 0.5,
+    }
+}
 
 

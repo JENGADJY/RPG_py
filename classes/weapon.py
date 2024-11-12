@@ -6,5 +6,8 @@ class weapon:
         self.pda=pda
 
 
+    def attack(self):
+        return self.pda
+
 
 

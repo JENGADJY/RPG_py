@@ -48,6 +48,9 @@ class personnage(etre) :
         else:
             print("Choix invalide.")
             return None
+        
+    def equip_weapon(self, weapon):
+        self.weapon.append(weapon)
 
 
 

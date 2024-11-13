@@ -2,6 +2,9 @@ from classes.etre import personnage, Monster, type_interactions
 from classes.objet import Potion
 from classes.weapon import weapon
 import random
+from map import Map
+from classes.etre import monstres
+
 
 #probleme d'import 
 knife=weapon("Knife","physical",50)
@@ -66,73 +69,110 @@ potions = [
 
 
 def RPG():
-    c=input("Please enter your name")
-    character=personnage(c)
+    c = input("Please enter your name: ")
+    character = personnage(c)
+    
     print("What weapon do you like:")
-    print("1.Knife")
-    print("2.Magic book")
-    first_weapon =int(input())
+    print("1. Knife")
+    print("2. Magic book")
+    first_weapon = int(input())
 
-    if first_weapon== 1:
+    if first_weapon == 1:
         print("Vous avez obtenu un couteau")
-        character.weapon.append(knife)
-        print(f"Character's weapon: {[weapon.name for weapon in character.weapon]}")
-    if first_weapon==2:
-        print("Vous avez obtenu un livre magic")
-        character.weapon.append(magic_book)
-        print(f"Character's weapon: {[weapon.name for weapon in character.weapon]}")
-    if first_weapon==3:
-        print("bref")
+        character.weapon.append(knife) 
+    elif first_weapon == 2:
+        print("Vous avez obtenu un livre magique")
+        character.weapon.append(magic_book) 
+    else:
+        print("Choix invalide. Sortie du jeu.")
         exit()
 
+    if len(character.weapon) == 0:
+        print("Vous n'avez pas d'arme équipée. Vous ne pouvez pas attaquer.")
+        return  
 
-
-def damage(attaquant, victime):
-    weapon = attaquant.use_weapon()  
-    if weapon is not None:
-        ennemi_type = victime.name
-        if weapon.effect == "Physical":
-            multiplier = type_interactions["Physical"].get(ennemi_type, 1.0)
-            degats = weapon.pda * (attaquant.attack / victime.defense) * multiplier
-            victime.hp -= degats
-            print(f"{attaquant.name} inflige {degats:.2f} dégâts physiques à {victime.name}.")
-        elif weapon.effect == "Magic":
-            multiplier = type_interactions["Magic"].get(ennemi_type, 1.0)
-            degats = weapon.pda * (attaquant.attack / victime.defense) * multiplier
-            victime.hp -= degats
-            print(f"{attaquant.name} inflige {degats:.2f} dégâts magiques à {victime.name}.")
+    print(f"Character's weapon: {[weapon.name for weapon in character.weapon]}")
+    game_map = Map(10, 10)
+    game_map.personnage = character
+    boss = Monster("Dark Lord", 500, 50, 4, 4)  
+    game_map.ajouter_boss(boss, 4, 4)  
+    
+    
+    game_map.declencher_combat()  
+    while True:
+        direction = input("Entrez une direction pour déplacer le joueur (up, down, left, right) : ")
+        if direction == 'save':
+            from save import saving
+            saving(character,game_map)  
         else:
-            print("Type d'arme non reconnu.")
-    else:
-        print("Aucune arme sélectionnée.")
+            game_map.deplacer_personnage(direction)
+            game_map.declencher_evenement_aleatoire()
 
 
-def ennemie_attack(ennemie, personnage):
-    weapon = ennemie.use_weapon()
-    if weapon is not None:
-        personnage_type = personnage.name
-        multiplier = type_interactions["Physical"].get(personnage_type, 1.0)
-        degats = weapon.pda * (ennemie.attack / personnage.defense) * multiplier
-        personnage.hp -= degats
-        print(f"{ennemie.name} inflige {degats:.2f} dégâts à {personnage.name}.")
-    else:
-        print("L'ennemi n'a pas d'arme sélectionnée.")
+
 
 def combat(personnage, ennemi):
     print(f"Vous combattez {ennemi.name}!")
-    
+
     while personnage.hp > 0 and ennemi.hp > 0:
-        damage(personnage, ennemi)
+        print(f"\nQue voulez-vous faire ?")
+        print("1. Attaquer")
+        print("2. Utiliser un objet")
+        print("3. Fuir")
         
-        if ennemi.hp <= 0:
-            print(f"{ennemi.name} a été vaincu!")
+        action = int(input("Choix (entier seulement accepté) : "))
+
+        if action == 1:
+            
+            damage(personnage, ennemi)
+            if ennemi.hp <= 0:  
+                print(f"{ennemi.name} a été vaincu!")
+                reward_character(personnage,ennemi)
+                break
+            
+            ennemie_attack(ennemi, personnage)
+            if personnage.hp <= 0:  
+                print(f"{personnage.name} a été vaincu!")
+                print("Vous avez perdu")
+                exit()
+                
+        elif action == 2:
+            
+            personnage.use_object()
+            if personnage.hp <= 0:  
+                print(f"{personnage.name} n'a pas survécu à l'attaque de l'ennemi après avoir utilisé un objet.")
+                break
+        elif action == 3:
+            print(f"{personnage.name} a fui le combat.")
             break
+        else:
+            print("Choix invalide. Veuillez entrer un nombre entre 1 et 3.")
+            
+        print(f"\nÉtat actuel : {personnage.name} - HP: {personnage.hp}, {ennemi.name} - HP: {ennemi.hp}")
+
+
+def damage(personnage, ennemi):
+    if len(personnage.weapon) > 0:
         
-        ennemie_attack(ennemi, personnage)
-        
-        if personnage.hp <= 0:
-            print(f"{personnage.name} a été vaincu!")
-            break
+        weapon = personnage.use_weapon()
+        damage_dealt = weapon.attack()  
+        print(f"{personnage.name} attaque avec {weapon.name} et inflige {damage_dealt} dégâts à {ennemi.name}.")
+        ennemi.hp -= damage_dealt
+    else:
+        print(f"{personnage.name} n'a pas d'arme équipée et ne peut pas attaquer.")
+
+
+def ennemie_attack(ennemi, personnage):
+    if len(ennemi.weapon) > 0:
+        weapon = ennemi.use_weapon()
+        damage_dealt = weapon.attack()
+        print(f"{ennemi.name} attaque avec {weapon.name} et inflige {damage_dealt} dégâts à {personnage.name}.")
+        personnage.hp -= damage_dealt
+    else:
+        damage_dealt = random.randint(5, 10) 
+        print(f"{ennemi.name} attaque avec ses griffes et inflige {damage_dealt} dégâts à {personnage.name}.")
+        personnage.hp -= damage_dealt
+
 
 
 def reward_character(character, ennemi):
@@ -149,7 +189,7 @@ def reward_character(character, ennemi):
             for i, w in enumerate(character.weapon):
                 print(f"{i}: {w.name}")
             
-            choice = int(input("Choisissez l'index de l'arme à remplacer : "))
+            choice = int(input(f"Choisissez l'index de l'arme à remplacer contre {weapon} : "))
             if 0 <= choice < len(character.weapon):
                 replaced_weapon = character.weapon[choice]
                 character.weapon[choice] = weapon

@@ -1,0 +1,26 @@
+{
+    "character": {
+        "name": "ZZEE",
+        "hp": 84,
+        "level": 0,
+        "xp": 490,
+        "weapon": [
+            "Knife",
+            "Sword",
+            "Dagger"
+        ],
+        "inventaire": [
+            "Potion de r\u00e9surrection",
+            "Potion de mana",
+            "Potion de coup critique"
+        ],
+        "position": [
+            0,
+            0
+        ]
+    },
+    "map": {
+        "largeur": 10,
+        "hauteur": 10
+    }
+}

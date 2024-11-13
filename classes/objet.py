@@ -1,5 +1,3 @@
-
-
 class objet:
     def __init__(self,name,effect,pda):
         self.name=name

@@ -4,26 +4,32 @@ class etre :
     def __init__(self,name):
         self.name= name
 
-class personnage(etre) :
-    def __init__(self,name):
+class personnage(etre):
+    def __init__(self, name):
         super().__init__(name)
         self.hp = 100
         self.level = 1
-        self.xp= 500
+        self.xp = 500
         self.attack = 25
         self.defense = 25
         self.inventaire = []
-        self.weapon=[]
+        self.weapon = []
+        self.position = [0, 0]
 
     def verif_level(self):
-        temp = self.level 
-        niveau = math.floor(math.sqrt(self.xp/500))
-        if niveau == temp :
-            print("Vous n'avez pas changez de niveau")
+        print(f"XP actuelle de {self.name}: {self.xp}")
+        temp = self.level
+        niveau = math.floor(math.sqrt(self.xp / 500))
+    
+        if niveau == temp:
+            print("Vous n'avez pas changé de niveau.")
         else:
             self.level = niveau
             print(f"Vous êtes passé au niveau {self.level}")
+        
+        print(f"XP de {self.name} après vérification de niveau: {self.xp}")
         return self.level
+
     
     def use_object(self):
         print("Voici votre inventaire :")

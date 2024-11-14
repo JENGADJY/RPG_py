@@ -8,11 +8,11 @@ def saving(character, game_map):
             'xp': character.xp,
             'weapon': [weapon.name for weapon in character.weapon],
             'inventaire': [potion.name for potion in character.inventaire],
-            'position': game_map.player_position,  # Utilisez player_position de game_map
+            'position': game_map.player_position,  
         },
         'map': {
-            'largeur': game_map.rows,  # Modifié pour utiliser rows
-            'hauteur': game_map.cols,  # Modifié pour utiliser cols
+            'largeur': game_map.rows,  
+            'hauteur': game_map.cols,  
         }
     }
 

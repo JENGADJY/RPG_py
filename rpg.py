@@ -41,6 +41,12 @@ skeleton_weapons = [
     weapon("Skeleton Shield", "Physical", 35),
 ]
 
+
+ntr = weapon("N**** Ta race","dragon",500),
+hellfire = weapon("HELL'S FIRE","dragon",1000),
+ahbah = weapon("AH BAH","dragon",10000)
+
+
         
 
 healing_potion = Potion("Potion de soin", "heal", 30)  # Restaure 30 HP
@@ -94,7 +100,9 @@ def RPG():
     print(f"Character's weapon: {[weapon.name for weapon in character.weapon]}")
     game_map = Map(10, 10)
     game_map.personnage = character
-    boss = Monster("Dark Lord", 500, 50, 4, 4)  
+    boss = Monster("Dark Lord", 500, 50, 1000, 1000)
+    boss.weapon.append(ntr,hellfire,ahbah)
+
     game_map.ajouter_boss(boss, 4, 4)  
     
     
